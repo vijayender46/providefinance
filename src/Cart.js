@@ -34,7 +34,7 @@ function Cart({ text='Browse the items in your cart and then click Checkout', mo
                         )
                 }
             </List>
-            <div>Total Price: {products.reduce((n, {price}) => n + price, 0)}</div>
+            <div>Total Price: {products.reduce((total, item) => total + item.price * item.quantity, 0)}</div>
             {mode === 'browse' ? (
                 <Link style={{marginBottom: 10}} to={'/checkout'} variant={'contained'}><Button>Checkout</Button></Link>
             ) : (
