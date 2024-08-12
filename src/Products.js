@@ -1,35 +1,31 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import {Button, Card, CardActions, CardContent, CardMedia, Grid, Typography} from "@mui/material";
 import Divider from '@mui/material/Divider';
 import Cart from "./Cart";
+import { useDispatch } from 'react-redux';
+import { addToCart } from './redux/cartSlice';
+import { getProductsSuccess } from './redux/productsSlice';
 
-
-class ProductList extends React.Component {
-    state = {
-        products: [],
-        productsInCart: [],
-    }
-
-    componentDidMount() {
+const ProductList = () => {
+    const dispatch = useDispatch();
+    const [products, setProducts] = useState([])
+    useEffect( ()=> {
         axios.get(`https://dummyjson.com/products?limit=20&skip=20`)
             .then(res => {
                 const products = res.data.products;
-                this.setState({ products });
+                console.log(products);
+                setProducts(products);
+                dispatch(getProductsSuccess(products))
             })
-    }
+    }, [dispatch])
 
-    addToCart (product) {
-        const newProduct = { ...product, quantity: 1};
-        this.setState({
-            productsInCart: [...this.state.productsInCart, newProduct]
-        });
+    const addItemToCart = (product) => {
+        dispatch(addToCart(product));
     }
-
-    render() {
         return (
             <div>
-                <Cart products={this.state.productsInCart} />
+                <Cart />
                 <Divider />
                 <h1>Products</h1>
                 <Grid container
@@ -38,8 +34,8 @@ class ProductList extends React.Component {
                       justifyContent="space-evenly"
                       alignItems="center">
                     {
-                        this.state.products
-                            .map(product =>
+                        products.map(product =>
+                            
                                 <Grid item key={product.id}>
                                     <Card>
                                         <CardMedia
@@ -54,7 +50,7 @@ class ProductList extends React.Component {
                                             </Typography>
                                         </CardContent>
                                         <CardActions>
-                                            <Button size="small" onClick={() => this.addToCart(product)}>Add to Cart</Button>
+                                            <Button size="small" onClick={() => addItemToCart(product)}>Add to Cart</Button>
                                         </CardActions>
                                     </Card>
                                 </Grid>
@@ -64,6 +60,5 @@ class ProductList extends React.Component {
             </div>
         )
     }
-}
 
 export default ProductList;

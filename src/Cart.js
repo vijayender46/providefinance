@@ -1,3 +1,4 @@
+
 import React from 'react';
 import {
     Button,
@@ -5,8 +6,20 @@ import {
     ListItem,
     ListItemText,
 } from "@mui/material";
+import { useDispatch, useSelector } from 'react-redux';
+import { Link, useNavigate } from 'react-router-dom';
+import { clearCart } from './redux/cartSlice';
 
-function Cart({ products = [], text='Browse the items in your cart and then click Checkout', mode='browse' }) {
+function Cart({ text='Browse the items in your cart and then click Checkout', mode='browse' }) {
+    const products = useSelector((state) => state.cart.items);
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+    const handleConfirmOrder = () => {
+        dispatch(clearCart());
+        alert('Order confirmed! Your cart is now empty.');
+        navigate(-1);
+      };
+    
     return (
         <div>
             <h1>Shopping Cart</h1>
@@ -15,7 +28,7 @@ function Cart({ products = [], text='Browse the items in your cart and then clic
                 {
                     products
                         .map(product =>
-                            <ListItem>
+                            <ListItem key={product.id}>
                                 <ListItemText primary={product.title} secondary={'Quantity: ' + product.quantity}/>
                             </ListItem>
                         )
@@ -23,9 +36,9 @@ function Cart({ products = [], text='Browse the items in your cart and then clic
             </List>
             <div>Total Price: {products.reduce((n, {price}) => n + price, 0)}</div>
             {mode === 'browse' ? (
-                <Button style={{marginBottom: 10}} href={'/checkout'} variant={'contained'}>Checkout</Button>
+                <Link style={{marginBottom: 10}} to={'/checkout'} variant={'contained'}><Button>Checkout</Button></Link>
             ) : (
-                <Button style={{marginBottom: 10}} href={'/checkout'} variant={'contained'}>Confirm Order</Button>
+               <Button onClick={()=>handleConfirmOrder()}>confirm Order</Button>
             )}
         </div>
     )

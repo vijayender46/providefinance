@@ -5,15 +5,18 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter } from "react-router-dom";
 import CssBaseline from '@mui/material/CssBaseline';
+import { Provider } from 'react-redux';
+import store from './redux/store';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <BrowserRouter>
-        <CssBaseline>
-            <App />
-        </CssBaseline>
-      </BrowserRouter>
+    <Provider store={store}>
+      <BrowserRouter>
+              <App />
+          <CssBaseline />
+        </BrowserRouter>
+      </Provider>
   </React.StrictMode>
 );
 
