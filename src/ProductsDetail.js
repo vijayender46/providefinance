@@ -42,6 +42,8 @@ const ProductDetailPage = () => {
         );
     }
 
+    const priceAfterDiscount = productDetails.price - (productDetails.price * productDetails.discountPercentage) / 100;
+
     return (
         <Container maxWidth="md" sx={{ marginTop: '2rem' }}>
             <Grid container spacing={4}>
@@ -64,7 +66,15 @@ const ProductDetailPage = () => {
                             {productDetails.description}
                         </Typography>
                         <Typography variant="h5" color="primary" paragraph>
-                            ${productDetails.price}
+                        {productDetails.discountPercentage > 0 ? (
+                                <>
+                                    <strike><small>${productDetails.price.toFixed(2)}</small></strike>
+                                    <br />
+                                    ${priceAfterDiscount.toFixed(2)}
+                                </>
+                            ) : (
+                                <>${productDetails.price.toFixed(2)}</>
+                            )}
                         </Typography>
                         <Button variant="contained" color="primary" onClick={addItemToCart}>
                             Add to Cart
