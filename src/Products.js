@@ -6,6 +6,7 @@ import Cart from "./Cart";
 import { useDispatch } from 'react-redux';
 import { addToCart } from './redux/cartSlice';
 import { getProductsSuccess } from './redux/productsSlice';
+import { Link } from 'react-router-dom';
 
 const ProductList = () => {
     const dispatch = useDispatch();
@@ -51,6 +52,7 @@ const ProductList = () => {
                                         </CardContent>
                                         <CardActions>
                                             <Button size="small" onClick={() => addItemToCart(product)}>Add to Cart</Button>
+                                            <Link to={`/product-details/${product.id}`}>View Detail</Link>
                                         </CardActions>
                                     </Card>
                                 </Grid>
